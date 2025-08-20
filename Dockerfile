@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub for AMD64
-FROM --platform=$BUILDPLATFORM python:3.10-slim AS base
+FROM --platform=$BUILDPLATFORM python:3.12-slim AS base
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -33,7 +33,7 @@ COPY --from=base /venv /venv
 ENV PATH="/venv/bin:$PATH"
 
 # Install PyTorch with CUDA support for NVIDIA GPUs
-RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu129
 
 # Expose the ComfyUI port
 EXPOSE 8188
@@ -42,7 +42,7 @@ EXPOSE 8188
 ENTRYPOINT ["python", "/app/main.py", "--listen"]
 
 # Use the official Python image from the Docker Hub for ARM64
-FROM --platform=$BUILDPLATFORM python:3.10-slim AS arm64
+FROM --platform=$BUILDPLATFORM python:3.12-slim AS arm64
 
 # Copy application and shared Python environment from base
 COPY --from=base /app /app
